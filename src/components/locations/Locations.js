@@ -8,6 +8,12 @@ export const LocationsButton = () => {
   const [locations, setLocations] = useState([]);
   const [locsShowing, showLocs] = useState(false);
 
+  useEffect(() => {
+    fetch(`${API}/locations`)
+      .then((res) => res.json())
+      .then((locationsArray) => setLocations(locationsArray));
+  }, []);
+
   const displayLocations = () => {
     if (locsShowing) {
       return (
@@ -15,7 +21,7 @@ export const LocationsButton = () => {
           {locations.map((loc) => {
             const [streetAddress, city, state] = loc.address.split(", ");
             return (
-              <div className="location">
+              <div className="location" key={loc.id}>
                 <div className="location__name">Kandy Korner</div>
                 <div className="location__address">
                   <div className="location__streetAddress">{streetAddress}</div>
@@ -33,12 +39,6 @@ export const LocationsButton = () => {
       );
     }
   };
-
-  useEffect(() => {
-    fetch(`${API}/locations`)
-      .then((res) => res.json())
-      .then((locationsArray) => setLocations(locationsArray));
-  }, []);
 
   return (
     <li className="navbar__item navbar__locations">
