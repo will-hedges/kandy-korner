@@ -11,9 +11,9 @@ export const NavBar = () => {
     <ul className="navbar">
       {/* {LocationsButton()} */}
       <li className="navbar__item navbar__locations">
-        <button className="btn" onClick={() => navigate("locations")}>
+        <Link className="navbar__link" to="locations" underline="none">
           Locations
-        </button>
+        </Link>
       </li>
       {/* display a 'products' link to staff only */}
       {kandyUserObj.staff ? (

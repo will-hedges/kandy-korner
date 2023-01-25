@@ -20,7 +20,7 @@ export const Products = () => {
 
   // fetch all products
   useEffect(() => {
-    fetch(`${API}/products`)
+    fetch(`${API}/products?_expand=productType`)
       .then((res) => res.json())
       .then((productsArray) => {
         productsArray.sort(sortProductNamesByAlpha);
@@ -58,7 +58,8 @@ export const Products = () => {
           return (
             <li className="product">
               {/* TODO FIXME want to preserve trailing zeros */}
-              {product.name} (${product.unitPrice}/ea)
+              {product.name} ({product.productType.typeName}) - $
+              {product.unitPrice}/ea
             </li>
           );
         })}
