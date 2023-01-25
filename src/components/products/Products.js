@@ -41,7 +41,7 @@ export const Products = () => {
       setFilteredProducts(products);
     }
     // I HATE THIS WARNING
-  }, [topPriced]);
+  }, [topPriced, products]);
 
   return (
     <>

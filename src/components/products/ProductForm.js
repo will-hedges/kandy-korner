@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const API = "http://localhost:8088";
+
 export const ProductForm = () => {
+  const navigate = useNavigate();
+
   const [productTypes, setProductTypes] = useState([]);
   const [product, update] = useState({
     name: "",
@@ -10,37 +13,36 @@ export const ProductForm = () => {
     unitPrice: 0,
   });
 
-  const navigate = useNavigate();
-
-  const localKandyUser = localStorage.getItem("kandy__user");
-  const kandyUserObj = JSON.parse(localKandyUser);
-
   const handleSubmitButtonClick = (e) => {
     e.preventDefault();
 
     const newProductObj = {
       name: product.name,
-      typeId: product.typeId,
+      productTypeId: product.typeId,
       unitPrice: product.unitPrice,
     };
 
-    return fetch(`${API}/products`, {
+    fetch(`${API}/products`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newProductObj),
-    }).then((res) => res.json());
+    })
+      .then((res) => res.json())
+      .then(() => navigate("/products"));
     // TODO FIXME want to add route for products
     // .then(() => navigate("/"))
   };
 
-  // fetch all the product types
-  fetch(`${API}/productTypes`)
-    .then((res) => res.json())
-    .then((productTypesArray) => {
-      setProductTypes(productTypesArray);
-    }, []);
+  useEffect(() => {
+    // fetch all the product types
+    fetch(`${API}/productTypes`)
+      .then((res) => res.json())
+      .then((productTypesArray) => {
+        setProductTypes(productTypesArray);
+      });
+  }, []);
 
   return (
     <form className="productForm">
@@ -104,7 +106,12 @@ export const ProductForm = () => {
           ></input>
         </div>
       </fieldset>
-      <button className="btn btn-primary">Submit Product</button>
+      <button
+        className="btn btn-primary"
+        onClick={(evt) => handleSubmitButtonClick(evt)}
+      >
+        Submit Product
+      </button>
     </form>
   );
 };
