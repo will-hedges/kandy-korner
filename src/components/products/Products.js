@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import "./Products.css";
 
 const API = "http://localhost:8088";
 
-const compareProductNames = (product1, product2) => {
+const sortProductNamesByAlpha = (product1, product2) => {
   // function to sort array of objects based on the property "name"
   if (product1.name < product2.name) {
     return -1;
@@ -14,54 +13,28 @@ const compareProductNames = (product1, product2) => {
   }
 };
 
-export const ProductsButton = () => {
-  const kandyUser = localStorage.getItem("kandy_user");
-  const kandyUserObj = JSON.parse(kandyUser);
-
+export const Products = () => {
   const [products, setProducts] = useState([]);
-  const [productsShowing, showProducts] = useState(false);
 
+  // fetch all products
   useEffect(() => {
     fetch(`${API}/products`)
       .then((res) => res.json())
-      .then((productsArray) => productsArray.sort(compareProductNames))
-      .then((sortedProductsArray) => setProducts(sortedProductsArray));
+      .then((productsArray) => {
+        productsArray.sort(sortProductNamesByAlpha);
+        setProducts(productsArray);
+      });
   }, []);
 
-  // need to sort productsArray by product name
-
-  const displayProducts = () => {
-    if (productsShowing) {
-      return (
-        <ul className="product__list">
-          {products.map((product) => {
-            return (
-              <li className="product" key={product.id}>
-                {product.name} - ${product.unitPrice}/ea
-              </li>
-            );
-          })}
-        </ul>
-      );
-    }
-  };
-
-  if (kandyUserObj.staff) {
-    return (
-      <li className="navbar__item navbar__products">
-        <button
-          onClick={() => {
-            if (!productsShowing) {
-              showProducts(true);
-            } else {
-              showProducts(false);
-            }
-          }}
-        >
-          Products
-        </button>
-        {displayProducts()}
-      </li>
-    );
-  }
+  return (
+    <ul className="products__list">
+      {products.map((product) => {
+        return (
+          <li className="product">
+            {product.name} (${product.unitPrice}/ea)
+          </li>
+        );
+      })}
+    </ul>
+  );
 };

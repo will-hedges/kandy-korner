@@ -1,15 +1,34 @@
 import { Link, useNavigate } from "react-router-dom";
-import { LocationsButton } from "../locations/Locations";
-import { ProductsButton } from "../products/Products";
 import "./NavBar.css";
 
 export const NavBar = () => {
   const navigate = useNavigate();
 
+  const kandyUser = localStorage.getItem("kandy_user");
+  const kandyUserObj = JSON.parse(kandyUser);
+
   return (
     <ul className="navbar">
-      {LocationsButton()}
-      {ProductsButton()}
+      {/* {LocationsButton()} */}
+      <li className="navbar__item navbar__locations">
+        <button className="btn" onClick={() => navigate("locations")}>
+          Locations
+        </button>
+      </li>
+      {/* display a 'products' link to staff only */}
+      {kandyUserObj.staff ? (
+        <li className="navbar__item navbar__products">
+          <Link
+            className="navbar__link"
+            to="products"
+            onClick={() => navigate("products")}
+          >
+            Products
+          </Link>
+        </li>
+      ) : (
+        <></>
+      )}
       <li className="navbar__item navbar__logout">
         <Link
           className="navbar__link"
