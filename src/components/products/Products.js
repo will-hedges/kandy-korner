@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const API = "http://localhost:8088";
 
@@ -14,6 +15,8 @@ const sortProductNamesByAlpha = (product1, product2) => {
 };
 
 export const Products = () => {
+  const navigate = useNavigate();
+
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [topPriced, setTopPriced] = useState(false);
@@ -23,6 +26,7 @@ export const Products = () => {
     fetch(`${API}/products?_expand=productType`)
       .then((res) => res.json())
       .then((productsArray) => {
+        // TODO take a look at ?_sort
         productsArray.sort(sortProductNamesByAlpha);
         setProducts(productsArray);
         setFilteredProducts(productsArray);
@@ -64,6 +68,9 @@ export const Products = () => {
           );
         })}
       </ul>
+      <button className="btn" onClick={() => navigate("/products/create")}>
+        Create Product
+      </button>
     </>
   );
 };
