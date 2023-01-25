@@ -18,11 +18,7 @@ export const NavBar = () => {
       {/* display a 'products' link to staff only */}
       {kandyUserObj.staff ? (
         <li className="navbar__item navbar__products">
-          <Link
-            className="navbar__link"
-            to="products"
-            onClick={() => navigate("products")}
-          >
+          <Link className="navbar__link" to="products" underline="none">
             Products
           </Link>
         </li>
